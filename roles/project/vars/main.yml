@@ -1,0 +1,8 @@
+version: '0.1.0'
+binary_path: '/usr/local/bin/project'
+config_file: '/usr/local/etc/project.ini'
+project_url: "https://s3.amazonaws.com/bucket/project-{{version}}.tar.gz"
+install_script: '/usr/local/bin/install_project'
+log_file: '/var/log/project.log'
+project_var: 'things'
+upstart_file: '/etc/init/project.conf'

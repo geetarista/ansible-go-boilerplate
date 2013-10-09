@@ -1,0 +1,27 @@
+---
+- name: install script
+  template: src=install.j2 dest={{install_script}}
+
+- name: project version
+  command: "/usr/bin/test `/usr/local/bin/project -v | tail -1` = {{version}}"
+  register: version
+  ignore_errors: True
+
+- name: install project
+  command: {{install_script}}
+  when: version|failed
+
+- name: config file
+  template: src=config.j2 dest={{config_file}}
+
+# Alternative: use the ini_file module
+- name: config file
+  ini_file: dest={{config_file}} section=stuff option=project_var value={{project_var}}
+
+- name: upstart file
+  template: src=upstart.j2 dest={{upstart_file}}
+  notify:
+    - restart project
+
+- name: ensure project started
+  service: name=project state=started
